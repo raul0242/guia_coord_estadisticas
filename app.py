@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="Guía Coordinador de Estadística - IMSS",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # --- CSS personalizado ---
@@ -1518,21 +1518,38 @@ if st.session_state.get("sidebar_collapse", False):
     st.session_state.sidebar_collapse = False
     components.html("""
         <script>
-            const isMobile = window.parent.innerWidth <= 768;
-            if (isMobile) {
-                const doc = window.parent.document;
-                const sidebar = doc.querySelector('[data-testid="stSidebar"]');
+        (function() {
+            function collapseSidebar() {
+                var doc = window.parent.document;
+                var sidebar = doc.querySelector('[data-testid="stSidebar"]');
                 if (sidebar) {
                     sidebar.setAttribute('aria-expanded', 'false');
                     sidebar.style.display = 'none';
                     sidebar.style.width = '0';
                     sidebar.style.minWidth = '0';
                     sidebar.style.overflow = 'hidden';
+                    sidebar.style.visibility = 'hidden';
+                    sidebar.style.position = 'fixed';
+                    sidebar.style.left = '-9999px';
+                    return true;
                 }
-                // También intentar click en el botón nativo de colapsar
-                const btns = doc.querySelectorAll('[data-testid="stSidebar"] button, [data-testid="collapsedControl"] button');
-                btns.forEach(function(b) { try { b.click(); } catch(e) {} });
+                return false;
             }
+            var isMobile = window.parent.innerWidth <= 768;
+            if (isMobile) {
+                // Intentar inmediatamente
+                if (!collapseSidebar()) {
+                    // Reintentar cada 100ms hasta 5 veces
+                    var tries = 0;
+                    var interval = setInterval(function() {
+                        tries++;
+                        if (collapseSidebar() || tries >= 5) {
+                            clearInterval(interval);
+                        }
+                    }, 100);
+                }
+            }
+        })();
         </script>
     """, height=0)
 
