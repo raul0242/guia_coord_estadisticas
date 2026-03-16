@@ -1127,6 +1127,7 @@ with st.sidebar:
             st.session_state.sidebar_collapse = True
             if key != "quiz":
                 st.session_state.quiz_activo = False
+            st.rerun()
 
     st.divider()
     st.caption("Material basado en el PDF oficial del IMSS - 3a Categoría Coordinador de Estadística 2020")
