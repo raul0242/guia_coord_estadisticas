@@ -67,6 +67,30 @@ st.markdown("""
     @media (max-width: 768px) {
         .main-header h1 { font-size: 1.3rem; }
         .main-header p { font-size: 0.85rem; }
+        /* Ocultar sidebar completamente en móvil cuando está colapsado */
+        section[data-testid="stSidebar"][aria-expanded="false"],
+        section[data-testid="stSidebar"]:not([aria-expanded="true"]) {
+            display: none !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            overflow: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        section[data-testid="stSidebar"][aria-expanded="true"] {
+            display: flex !important;
+            width: 85vw !important;
+            max-width: 320px !important;
+            position: fixed !important;
+            z-index: 9999 !important;
+            top: 0 !important;
+            left: 0 !important;
+            height: 100vh !important;
+            opacity: 1 !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -1495,19 +1519,18 @@ if st.session_state.get("sidebar_collapse", False):
         <script>
             const isMobile = window.parent.innerWidth <= 768;
             if (isMobile) {
-                const btn = window.parent.document.querySelector(
-                    '[data-testid="stSidebar"] button[kind="header"]'
-                );
-                if (btn) {
-                    btn.click();
-                } else {
-                    const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-                    if (sidebar) {
-                        sidebar.setAttribute('aria-expanded', 'false');
-                        sidebar.style.transform = 'translateX(-100%)';
-                        sidebar.style.transition = 'transform 0.3s ease';
-                    }
+                const doc = window.parent.document;
+                const sidebar = doc.querySelector('[data-testid="stSidebar"]');
+                if (sidebar) {
+                    sidebar.setAttribute('aria-expanded', 'false');
+                    sidebar.style.display = 'none';
+                    sidebar.style.width = '0';
+                    sidebar.style.minWidth = '0';
+                    sidebar.style.overflow = 'hidden';
                 }
+                // También intentar click en el botón nativo de colapsar
+                const btns = doc.querySelectorAll('[data-testid="stSidebar"] button, [data-testid="collapsedControl"] button');
+                btns.forEach(function(b) { try { b.click(); } catch(e) {} });
             }
         </script>
     """, height=0)
