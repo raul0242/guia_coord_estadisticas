@@ -29,22 +29,24 @@ st.markdown("""
     .main-header h1 { color: white; margin: 0; font-size: 1.8rem; }
     .main-header p { color: #d4edda; margin: 0.3rem 0 0 0; font-size: 1rem; }
     .tema-card {
-        background: #f8f9fa;
+        background: #1a1a2e;
         border-left: 4px solid #006847;
         padding: 1rem 1.2rem;
         border-radius: 0 8px 8px 0;
         margin-bottom: 0.8rem;
+        color: #e0e0e0;
     }
-    .correct { background-color: #d4edda; padding: 1rem; border-radius: 8px; border-left: 4px solid #28a745; }
-    .incorrect { background-color: #f8d7da; padding: 1rem; border-radius: 8px; border-left: 4px solid #dc3545; }
+    .correct { background-color: #1b4332; color: #d4edda; padding: 1rem; border-radius: 8px; border-left: 4px solid #28a745; }
+    .incorrect { background-color: #4a1520; color: #f8d7da; padding: 1rem; border-radius: 8px; border-left: 4px solid #dc3545; }
     .score-box {
         background: linear-gradient(135deg, #006847, #00843D);
         color: white; padding: 1.2rem; border-radius: 12px;
         text-align: center; font-size: 1.3rem;
     }
     .study-note {
-        background: #fff3cd; border-left: 4px solid #ffc107;
+        background: #3d2e00; border-left: 4px solid #ffc107;
         padding: 1rem; border-radius: 0 8px 8px 0; margin: 0.5rem 0;
+        color: #ffe69c;
     }
     .flashcard-front {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -54,10 +56,11 @@ st.markdown("""
         font-size: 1.2rem; cursor: pointer;
     }
     .flashcard-back {
-        background: #f0f2f6; padding: 2rem; border-radius: 12px;
+        background: #1a1a2e; padding: 2rem; border-radius: 12px;
         text-align: center; min-height: 150px;
         display: flex; align-items: center; justify-content: center;
         border: 2px solid #764ba2;
+        color: #ffffff;
     }
     div[data-testid="stExpander"] { border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 0.5rem; }
 </style>
