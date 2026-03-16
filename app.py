@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import random
 import json
 from datetime import datetime
@@ -63,6 +64,10 @@ st.markdown("""
         color: #ffffff;
     }
     div[data-testid="stExpander"] { border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 0.5rem; }
+    @media (max-width: 768px) {
+        .main-header h1 { font-size: 1.3rem; }
+        .main-header p { font-size: 0.85rem; }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -1095,6 +1100,7 @@ with st.sidebar:
     for key, label in paginas.items():
         if st.button(label, key=f"nav_{key}", use_container_width=True):
             st.session_state.pagina = key
+            st.session_state.sidebar_collapse = True
             if key != "quiz":
                 st.session_state.quiz_activo = False
 
@@ -1481,6 +1487,30 @@ def pagina_progreso():
 # ============================================================
 # ROUTER
 # ============================================================
+
+# Auto-colapsar sidebar en móvil después de navegar
+if st.session_state.get("sidebar_collapse", False):
+    st.session_state.sidebar_collapse = False
+    components.html("""
+        <script>
+            const isMobile = window.parent.innerWidth <= 768;
+            if (isMobile) {
+                const btn = window.parent.document.querySelector(
+                    '[data-testid="stSidebar"] button[kind="header"]'
+                );
+                if (btn) {
+                    btn.click();
+                } else {
+                    const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+                    if (sidebar) {
+                        sidebar.setAttribute('aria-expanded', 'false');
+                        sidebar.style.transform = 'translateX(-100%)';
+                        sidebar.style.transition = 'transform 0.3s ease';
+                    }
+                }
+            }
+        </script>
+    """, height=0)
 
 router = {
     "inicio": pagina_inicio,
