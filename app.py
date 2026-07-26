@@ -1846,23 +1846,26 @@ def pagina_quiz():
                 key="quiz_num_slider",
             )
 
-        st.info(f"Se seleccionarán **{num_preguntas}** preguntas aleatorias de **{max_preguntas}** disponibles. Las preguntas no se repiten entre exámenes hasta agotar el banco del tema.")
+        st.info(f"Se seleccionarán **{num_preguntas}** preguntas aleatorias de **{max_preguntas}** disponibles. Hasta un 10% pueden ser preguntas ya vistas (repaso); el resto siempre serán nuevas hasta agotar el banco del tema.")
 
         if st.button("🚀 Iniciar Examen", type="primary", use_container_width=True):
-            # Evitar repetir preguntas ya usadas en exámenes anteriores:
-            # primero entran las no vistas; solo se completa con vistas si no alcanzan
+            # Hasta un 10% del examen puede ser de preguntas ya vistas (repaso);
+            # el resto se toma de las no vistas hasta agotar el banco del tema
             usadas = set(st.session_state.preguntas_usadas)
-            disponibles = [i for i in indices_filtrados if i not in usadas]
-            if len(disponibles) >= num_preguntas:
-                seleccion_idx = random.sample(disponibles, num_preguntas)
-            else:
-                faltantes = num_preguntas - len(disponibles)
-                repetibles = [i for i in indices_filtrados if i in usadas]
-                seleccion_idx = disponibles + random.sample(repetibles, faltantes)
-                random.shuffle(seleccion_idx)
-                # Se agotó el banco del tema: reiniciar su ciclo
+            no_vistas = [i for i in indices_filtrados if i not in usadas]
+            vistas = [i for i in indices_filtrados if i in usadas]
+
+            n_repetidas = min(len(vistas), round(num_preguntas * 0.10))
+            n_nuevas = num_preguntas - n_repetidas
+            if n_nuevas > len(no_vistas):
+                # No alcanzan las preguntas nuevas: completar con vistas y reiniciar el ciclo
+                n_nuevas = len(no_vistas)
+                n_repetidas = num_preguntas - n_nuevas
                 for i in indices_filtrados:
                     usadas.discard(i)
+
+            seleccion_idx = random.sample(no_vistas, n_nuevas) + random.sample(vistas, n_repetidas)
+            random.shuffle(seleccion_idx)
             usadas.update(seleccion_idx)
             st.session_state.preguntas_usadas = list(usadas)
 
