@@ -2,6 +2,7 @@ import streamlit as st
 import random
 import json
 from datetime import datetime
+from pathlib import Path
 
 # ============================================================
 # GUÍA INTERACTIVA - COORDINADOR DE ESTADÍSTICA (IMSS)
@@ -998,6 +999,614 @@ PREGUNTAS = [
         "respuesta": 2,
         "explicacion": "El subsistema 14 corresponde al Censo de Población Adscrita a Médico Familiar (formato manual, captura anual).",
     },
+    # --- NORMATIVIDAD (adicionales) ---
+    {
+        "tema": "I. Normatividad y Marco Legal",
+        "pregunta": "Según el Artículo 107 de la Ley General de Salud, ¿qué deben llevar los establecimientos de salud?",
+        "opciones": [
+            "Un registro de asistencia del personal",
+            "Un padrón de proveedores autorizados",
+            "Sistemas de información",
+            "Un inventario de medicamentos",
+        ],
+        "respuesta": 2,
+        "explicacion": "El Art. 107 de la Ley General de Salud establece que los establecimientos que presten servicios de salud llevarán sistemas de información.",
+    },
+    {
+        "tema": "I. Normatividad y Marco Legal",
+        "pregunta": "¿En qué fecha fue publicada la Ley General de Transparencia y Acceso a la Información Pública en el DOF?",
+        "opciones": [
+            "04 de mayo de 2015",
+            "23 de enero de 2012",
+            "26 de enero de 2017",
+            "15 de septiembre de 2014",
+        ],
+        "respuesta": 0,
+        "explicacion": "La Ley General de Transparencia y Acceso a la Información Pública fue publicada en el DOF el 04 de mayo de 2015. Es el primer ordenamiento que regula el tratamiento de datos personales en el sector público.",
+    },
+    {
+        "tema": "I. Normatividad y Marco Legal",
+        "pregunta": "Según la Ley Federal de Archivos, ¿qué es el 'Archivo de trámite'?",
+        "opciones": [
+            "Unidad de documentos de consulta esporádica",
+            "Documentos de conservación permanente",
+            "Base de datos de documentos digitalizados",
+            "Unidad responsable de los documentos de uso cotidiano",
+        ],
+        "respuesta": 3,
+        "explicacion": "El Archivo de trámite es la unidad responsable de la administración de documentos de uso cotidiano y necesario para el ejercicio de las atribuciones de una unidad administrativa.",
+    },
+    # --- EXPEDIENTE CLÍNICO (adicionales) ---
+    {
+        "tema": "II. Expediente Clínico y ARIMAC",
+        "pregunta": "¿Cómo se define el expediente clínico?",
+        "opciones": [
+            "Conjunto único de información y datos personales de un paciente",
+            "Listado de recetas médicas emitidas",
+            "Registro contable de servicios otorgados",
+            "Carpeta con documentos administrativos de la unidad",
+        ],
+        "respuesta": 0,
+        "explicacion": "El expediente clínico es el conjunto único de información y datos personales de un paciente, integrado por documentos escritos, gráficos, imagenológicos, electrónicos, magnéticos, etc.",
+    },
+    {
+        "tema": "II. Expediente Clínico y ARIMAC",
+        "pregunta": "¿Cuáles son los tipos de documentos que se manejan en el Archivo Clínico?",
+        "opciones": [
+            "Originales, copias y duplicados",
+            "Documentos activos, pasivos y cancelados",
+            "Documentos de archivo, de comprobación administrativa inmediata y de apoyo informativo",
+            "Documentos médicos, de enfermería y administrativos",
+        ],
+        "respuesta": 2,
+        "explicacion": "Los tipos de documentos son: Documentos de archivo, Documentos de comprobación administrativa inmediata y Documentos de apoyo informativo.",
+    },
+    {
+        "tema": "II. Expediente Clínico y ARIMAC",
+        "pregunta": "¿Dónde deben estar contenidos los documentos del expediente clínico?",
+        "opciones": [
+            "En un sobre sellado",
+            "Dentro de una carpeta de contención debidamente identificada",
+            "En cajas de archivo muerto",
+            "En el área de trabajo social",
+        ],
+        "respuesta": 1,
+        "explicacion": "El expediente clínico debe estar dentro de una carpeta de contención debidamente identificada.",
+    },
+    {
+        "tema": "II. Expediente Clínico y ARIMAC",
+        "pregunta": "¿Cómo se deben guardar los cuadros electrónicos generados?",
+        "opciones": [
+            "En una sola carpeta general",
+            "En el escritorio de la computadora",
+            "En discos compactos por semana",
+            "En carpetas anuales y subcarpetas por mes",
+        ],
+        "respuesta": 3,
+        "explicacion": "Los cuadros electrónicos se deben guardar en carpetas anuales y subcarpetas por mes.",
+    },
+    {
+        "tema": "II. Expediente Clínico y ARIMAC",
+        "pregunta": "¿Dónde se deben respaldar los cuadros electrónicos?",
+        "opciones": [
+            "En el equipo generador y en otro equipo diferente",
+            "Únicamente en el equipo generador",
+            "Solo en la nube institucional",
+            "En una memoria USB personal",
+        ],
+        "respuesta": 0,
+        "explicacion": "Los cuadros electrónicos se deben respaldar en el equipo generador y en otro equipo diferente.",
+    },
+    {
+        "tema": "II. Expediente Clínico y ARIMAC",
+        "pregunta": "Entre otros documentos, ¿qué debe contener el expediente clínico?",
+        "opciones": [
+            "Solo las notas médicas del último año",
+            "Historia clínica, resultados de laboratorio y gabinete, diagnósticos y plan de tratamiento",
+            "Únicamente los consentimientos informados",
+            "El comprobante de vigencia de derechos",
+        ],
+        "respuesta": 1,
+        "explicacion": "El expediente debe contener: Historia Clínica, interrogatorio, exploración física, resultados de laboratorio y gabinete, diagnósticos, plan de tratamiento, hoja de enfermería, cartas de consentimiento informado, entre otros.",
+    },
+    {
+        "tema": "II. Expediente Clínico y ARIMAC",
+        "pregunta": "¿Qué documento del expediente registra la salida del paciente por decisión propia?",
+        "opciones": [
+            "Nota de defunción",
+            "Hoja de enfermería",
+            "Hoja de egreso voluntario",
+            "Carta de consentimiento informado",
+        ],
+        "respuesta": 2,
+        "explicacion": "La hoja de egreso voluntario documenta la salida del paciente por decisión propia y forma parte del expediente clínico.",
+    },
+    # --- SISTEMAS DE INFORMACIÓN (adicionales) ---
+    {
+        "tema": "III. Sistemas de Información en Salud",
+        "pregunta": "¿En qué fecha se implantó el DataMart Estadísticas Médicas?",
+        "opciones": [
+            "Diciembre de 2002",
+            "Enero de 2004",
+            "Junio de 2005",
+            "Enero de 2003",
+        ],
+        "respuesta": 1,
+        "explicacion": "El DataMart Estadísticas Médicas fue desarrollado en 2003 y su implantación fue en enero de 2004.",
+    },
+    {
+        "tema": "III. Sistemas de Información en Salud",
+        "pregunta": "¿Cuáles son los módulos del DataMart Estadísticas Médicas?",
+        "opciones": [
+            "Captura de Formatos, Validación SIAIS/SIMO, Envío de Información y Administrador",
+            "Consulta Externa, Hospitalización y Enlace",
+            "Registro, Codificación y Cierre",
+            "Urgencias, Laboratorio y Farmacia",
+        ],
+        "respuesta": 0,
+        "explicacion": "Los módulos del DataMart son: Captura de Formatos, Validación SIAIS/SIMO, Envío de Información y Administrador.",
+    },
+    {
+        "tema": "III. Sistemas de Información en Salud",
+        "pregunta": "En las unidades de medicina familiar, ¿desde qué sistema se transfieren las consultas hacia el SIAIS?",
+        "opciones": [
+            "SIMO Central",
+            "DataMart",
+            "SIMF",
+            "SEED",
+        ],
+        "respuesta": 2,
+        "explicacion": "Las consultas se transfieren del SIMF (Sistema de Información de Medicina Familiar) al SIAIS, con el cual tiene interface.",
+    },
+    {
+        "tema": "III. Sistemas de Información en Salud",
+        "pregunta": "¿Qué dirección emite el SIMO Central y sus manuales de operación?",
+        "opciones": [
+            "DGIS",
+            "DIS",
+            "CIAE",
+            "DIDT (Dirección de Innovación y Desarrollo Tecnológico)",
+        ],
+        "respuesta": 3,
+        "explicacion": "El SIMO Central y sus manuales de operación son emitidos por la Dirección de Innovación y Desarrollo Tecnológico (DIDT).",
+    },
+    # --- VIGILANCIA EPIDEMIOLÓGICA (adicionales) ---
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "¿Qué significan las siglas SUIVE?",
+        "opciones": [
+            "Sistema Único de Información para Vigilancia Epidemiológica",
+            "Sistema Unificado de Vigilancia de Enfermedades",
+            "Subsistema de Información de Vigilancia Estatal",
+            "Servicio Único de Investigación y Vigilancia Epidemiológica",
+        ],
+        "respuesta": 0,
+        "explicacion": "SUIVE = Sistema Único de Información para Vigilancia Epidemiológica.",
+    },
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "¿Con qué sistema se genera el Informe Semanal de Enfermedades Transmisibles y No Transmisibles?",
+        "opciones": [
+            "SIMO Central",
+            "SIAIS",
+            "SEED",
+            "DataMart",
+        ],
+        "respuesta": 1,
+        "explicacion": "El Informe Semanal de Enfermedades Transmisibles y No Transmisibles se genera con el SIAIS.",
+    },
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "En la nomenclatura BAEE00SS.DBF del archivo SUAVE, ¿qué representan las letras EE?",
+        "opciones": [
+            "El número de semana",
+            "La clave de la unidad médica",
+            "La clave del Estado",
+            "El año del informe",
+        ],
+        "respuesta": 2,
+        "explicacion": "En BAEE00SS.DBF, EE representa la clave del Estado y SS el número de la semana.",
+    },
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "En la nomenclatura BAEE00SS.DBF del archivo SUAVE, ¿qué representan las letras SS?",
+        "opciones": [
+            "La clave del Estado",
+            "El turno de captura",
+            "El código del padecimiento",
+            "El número de la semana",
+        ],
+        "respuesta": 3,
+        "explicacion": "En BAEE00SS.DBF, SS representa el número de la semana epidemiológica.",
+    },
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "¿Quién valida la información del Informe Semanal subida a la plataforma IBSv2?",
+        "opciones": [
+            "El Epidemiólogo",
+            "El Director de la unidad",
+            "El personal del ARIMAC",
+            "La DIDT",
+        ],
+        "respuesta": 0,
+        "explicacion": "Una vez subido el archivo a la plataforma IBSv2 Informe Semanal, se informa al Epidemiólogo para que valide la información.",
+    },
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "¿Para qué se utilizan los listados nominales en el ARIMAC?",
+        "opciones": [
+            "Para entregarlos a los pacientes",
+            "Únicamente para corregir información",
+            "Para publicarlos en la unidad",
+            "Para enviarlos a la Secretaría de Salud",
+        ],
+        "respuesta": 1,
+        "explicacion": "Los listados nominales solo se utilizan en el ARIMAC para corregir información.",
+    },
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "¿Qué genera el SUIVE respecto a los padecimientos del informe semanal?",
+        "opciones": [
+            "Certificados de defunción",
+            "Cuadros de productividad",
+            "Listados nominales de padecimientos de interés epidemiológico",
+            "Recetas electrónicas",
+        ],
+        "respuesta": 2,
+        "explicacion": "El SUIVE genera listados nominales de padecimientos del informe semanal y de padecimientos de interés epidemiológico.",
+    },
+    {
+        "tema": "IV. Vigilancia Epidemiológica",
+        "pregunta": "¿Cuál de los siguientes es un documento epidemiológico que debe resguardarse en el ARIMAC?",
+        "opciones": [
+            "El censo de personal de la unidad",
+            "Los vales de almacén",
+            "El inventario de equipo médico",
+            "El Informe Semanal (previo-definitivo)",
+        ],
+        "respuesta": 3,
+        "explicacion": "Entre los documentos a resguardar están: RAIS, notas médicas, el Informe Semanal (previo-definitivo) y los informes mensuales de productividad.",
+    },
+    # --- INDICADORES (adicionales) ---
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "¿Qué programas de salud integran los informes mensuales de coberturas?",
+        "opciones": [
+            "Salud del Niño, del Adolescente, de la Mujer, del Hombre y del Adulto Mayor",
+            "Vacunación, Nutrición y Salud Bucal",
+            "Prevención, Curación y Rehabilitación",
+            "Materno-Infantil y Enfermedades Crónicas",
+        ],
+        "respuesta": 0,
+        "explicacion": "Los informes mensuales de coberturas se integran por los programas: Salud del Niño, Salud del Adolescente, Salud de la Mujer, Salud del Hombre y Salud del Adulto Mayor.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "¿Qué componentes incluye el Programa Salud del Niño en los informes de coberturas?",
+        "opciones": [
+            "Vacunación, Estimulación Temprana y Salud Bucal",
+            "Nutrición, Prevención y Control, y Detección de Enfermedades",
+            "Crecimiento, Desarrollo y Alimentación",
+            "Peso, Talla y Agudeza Visual",
+        ],
+        "respuesta": 1,
+        "explicacion": "El Programa Salud del Niño incluye: Nutrición, Prevención y Control, y Detección de Enfermedades.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "Uno de los indicadores de atención médica mide el porcentaje de derechohabientes referidos a:",
+        "opciones": [
+            "Trabajo social",
+            "Urgencias",
+            "Segundo nivel de atención",
+            "Medicina preventiva",
+        ],
+        "respuesta": 2,
+        "explicacion": "El indicador mide el porcentaje de derechohabientes referidos a segundo nivel de atención.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "¿Qué personal otorga la atención preventiva integrada a los derechohabientes?",
+        "opciones": [
+            "La enfermera",
+            "El médico familiar",
+            "El epidemiólogo",
+            "El trabajador social",
+        ],
+        "respuesta": 0,
+        "explicacion": "La atención preventiva integrada en derechohabientes es otorgada por la enfermera.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "En planificación familiar, ¿cómo se registran las aceptantes?",
+        "opciones": [
+            "Por unidad médica y turno",
+            "Por tipo de método anticonceptivo y grupo de edad",
+            "Por número de hijos",
+            "Por estado civil y ocupación",
+        ],
+        "respuesta": 1,
+        "explicacion": "En planificación familiar las aceptantes se registran por Tipo de Método Anticonceptivo y Grupo de Edad.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "En Salud en el Trabajo, ¿cómo se reportan los días de incapacidad por pacientes?",
+        "opciones": [
+            "Solo por riesgo de trabajo",
+            "Solo por enfermedad general",
+            "Por turno y categoría del trabajador",
+            "Total, por enfermedad general y por riesgo de trabajo",
+        ],
+        "respuesta": 3,
+        "explicacion": "Los días de incapacidad por pacientes se reportan en total, por enfermedad general y por riesgo de trabajo.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "¿Según qué lista se reportan los motivos de atención que generaron días de incapacidad?",
+        "opciones": [
+            "La CIE-10 a 4 dígitos",
+            "El catálogo CLUES",
+            "La lista mexicana",
+            "El catálogo de puestos del IMSS",
+        ],
+        "respuesta": 2,
+        "explicacion": "El total de motivos de atención que generaron días de incapacidad se reporta por lista mexicana.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "¿Qué aspectos comprende el informe de Salud Materna?",
+        "opciones": [
+            "Embarazo, puerperio y sus complicaciones; climaterio y menopausia; y vigilancia materna",
+            "Solo el control prenatal",
+            "Únicamente partos y cesáreas",
+            "Lactancia materna y vacunación",
+        ],
+        "respuesta": 0,
+        "explicacion": "Salud Materna comprende: embarazo, puerperio y sus complicaciones; climaterio y menopausia; y vigilancia materna.",
+    },
+    {
+        "tema": "V. Indicadores Médicos",
+        "pregunta": "En embarazadas, ¿qué mide uno de los indicadores de atención médica?",
+        "opciones": [
+            "El número de ultrasonidos realizados",
+            "El porcentaje con auscultación de frecuencia cardiaca fetal",
+            "El porcentaje con cesárea programada",
+            "El número de consultas odontológicas",
+        ],
+        "respuesta": 1,
+        "explicacion": "El indicador mide el porcentaje de embarazadas con auscultación de frecuencia cardiaca fetal.",
+    },
+    # --- CIE-10 (adicionales) ---
+    {
+        "tema": "VI. Clasificación Internacional de Enfermedades (CIE-10)",
+        "pregunta": "¿Cuál es el rango de códigos CIE-10 del Capítulo X (Enfermedades del sistema respiratorio)?",
+        "opciones": [
+            "I00-I99",
+            "E00-E90",
+            "J00-J99",
+            "P00-P96",
+        ],
+        "respuesta": 2,
+        "explicacion": "El Capítulo X (Enfermedades del sistema respiratorio) corresponde a los códigos J00-J99.",
+    },
+    {
+        "tema": "VI. Clasificación Internacional de Enfermedades (CIE-10)",
+        "pregunta": "¿A qué capítulo de la CIE-10 corresponde el rango O00-O99?",
+        "opciones": [
+            "Cap. XVI: Afecciones del periodo perinatal",
+            "Cap. XV: Embarazo, parto y puerperio",
+            "Cap. XVII: Malformaciones congénitas",
+            "Cap. XX: Causas externas",
+        ],
+        "respuesta": 1,
+        "explicacion": "El rango O00-O99 corresponde al Capítulo XV: Embarazo, parto y puerperio.",
+    },
+    {
+        "tema": "VI. Clasificación Internacional de Enfermedades (CIE-10)",
+        "pregunta": "¿A qué corresponde el rango C00-D48 en la CIE-10?",
+        "opciones": [
+            "Neoplasias",
+            "Enfermedades infecciosas y parasitarias",
+            "Enfermedades del sistema circulatorio",
+            "Enfermedades endocrinas y metabólicas",
+        ],
+        "respuesta": 0,
+        "explicacion": "El rango C00-D48 corresponde al Capítulo II: Neoplasias.",
+    },
+    {
+        "tema": "VI. Clasificación Internacional de Enfermedades (CIE-10)",
+        "pregunta": "¿Qué paso de selección de mortalidad corresponde a 'Hay Secuencia' (antes R1)?",
+        "opciones": [
+            "SP2",
+            "SP6",
+            "SP8",
+            "SP4",
+        ],
+        "respuesta": 3,
+        "explicacion": "SP4 corresponde a 'Hay Secuencia' (antes conocida como Regla 1).",
+    },
+    {
+        "tema": "VI. Clasificación Internacional de Enfermedades (CIE-10)",
+        "pregunta": "¿Qué paso de selección de mortalidad corresponde a 'No Hay Secuencia' (antes R2)?",
+        "opciones": [
+            "SP4",
+            "SP5",
+            "SP7",
+            "SP1",
+        ],
+        "respuesta": 1,
+        "explicacion": "SP5 corresponde a 'No Hay Secuencia' (antes conocida como Regla 2).",
+    },
+    {
+        "tema": "VI. Clasificación Internacional de Enfermedades (CIE-10)",
+        "pregunta": "¿A qué corresponde el paso M2 en la codificación de mortalidad?",
+        "opciones": [
+            "Especificidad (antes RD)",
+            "Asociación",
+            "Causa Obvia",
+            "Volver a comprobar pasos anteriores",
+        ],
+        "respuesta": 0,
+        "explicacion": "M2 corresponde a Especificidad (antes conocida como Regla D).",
+    },
+    # --- MORTALIDAD (adicionales) ---
+    {
+        "tema": "VII. Mortalidad y Certificado de Defunción",
+        "pregunta": "¿Qué contiene la Parte 1 del certificado de defunción?",
+        "opciones": [
+            "Los datos generales del fallecido",
+            "La secuencia causal (a, b, c, d) desde la causa directa hasta la causa básica",
+            "Los antecedentes familiares",
+            "El nombre del médico certificante",
+        ],
+        "respuesta": 1,
+        "explicacion": "La Parte 1 contiene la secuencia causal (líneas a, b, c, d) que va de la causa directa a la causa básica de defunción.",
+    },
+    {
+        "tema": "VII. Mortalidad y Certificado de Defunción",
+        "pregunta": "¿Qué se registra en la Parte 2 del certificado de defunción?",
+        "opciones": [
+            "La causa directa de la muerte",
+            "Los datos del Registro Civil",
+            "Otros estados patológicos significativos que contribuyeron a la muerte",
+            "La secuencia causal completa",
+        ],
+        "respuesta": 2,
+        "explicacion": "En la Parte 2 se registran otros estados patológicos significativos que contribuyeron a la muerte, pero que no forman parte de la secuencia causal.",
+    },
+    {
+        "tema": "VII. Mortalidad y Certificado de Defunción",
+        "pregunta": "¿Cuál es el objetivo principal de la codificación de la mortalidad?",
+        "opciones": [
+            "Obtener la causa básica de defunción",
+            "Contar el número total de muertes",
+            "Identificar al médico tratante",
+            "Registrar la hora de la defunción",
+        ],
+        "respuesta": 0,
+        "explicacion": "La causa básica de defunción es el objetivo principal de la codificación de la mortalidad.",
+    },
+    {
+        "tema": "VII. Mortalidad y Certificado de Defunción",
+        "pregunta": "¿Se acepta la hemofilia (D66, D67) como debida a cualquier otra enfermedad?",
+        "opciones": [
+            "Sí, siempre",
+            "Solo si es hereditaria",
+            "Sí, en adultos mayores",
+            "No, es una secuencia rechazada",
+        ],
+        "respuesta": 3,
+        "explicacion": "No se acepta la hemofilia (D66, D67) como debida a cualquier otra enfermedad. Es una secuencia rechazada.",
+    },
+    {
+        "tema": "VII. Mortalidad y Certificado de Defunción",
+        "pregunta": "¿Se acepta el suicidio (X60-X84) como debido a otras afecciones?",
+        "opciones": [
+            "Sí, si hay depresión diagnosticada",
+            "No, es una secuencia rechazada",
+            "Solo con dictamen del ministerio público",
+            "Sí, en cualquier caso",
+        ],
+        "respuesta": 1,
+        "explicacion": "No se acepta el suicidio (X60-X84) como debido a otras afecciones. Es una secuencia rechazada.",
+    },
+    {
+        "tema": "VII. Mortalidad y Certificado de Defunción",
+        "pregunta": "¿Qué indica el código O97.X?",
+        "opciones": [
+            "Muerte obstétrica de causa no especificada",
+            "Muerte materna antes de los 42 días",
+            "Muerte por secuela de causa obstétrica directa, un año o más después de la terminación del embarazo",
+            "Muerte fetal tardía",
+        ],
+        "respuesta": 2,
+        "explicacion": "O97.X: Muerte por secuela de causa obstétrica directa, que ocurre un año o más después de la terminación del embarazo.",
+    },
+    {
+        "tema": "VII. Mortalidad y Certificado de Defunción",
+        "pregunta": "¿Para qué se autoriza la presunción de causa intercurrente?",
+        "opciones": [
+            "Para aceptar una secuencia como fue informada, sin cambiar la codificación",
+            "Para modificar la causa básica seleccionada",
+            "Para eliminar causas de la Parte 2",
+            "Para recodificar el certificado completo",
+        ],
+        "respuesta": 0,
+        "explicacion": "La presunción de causa intercurrente se autoriza para aceptar una secuencia como fue informada; no se debe utilizar para cambiar la codificación.",
+    },
+    # --- PROCESOS OPERATIVOS (adicionales) ---
+    {
+        "tema": "VIII. Procesos Operativos del ARIMAC",
+        "pregunta": "En el proceso de integración de información al DataMart, ¿quién codifica y captura la información?",
+        "opciones": [
+            "El Director de la unidad",
+            "El personal del ARIMAC",
+            "El médico familiar",
+            "La DIDT",
+        ],
+        "respuesta": 1,
+        "explicacion": "El ARIMAC es quien codifica y captura la información en el proceso de integración al DataMart.",
+    },
+    {
+        "tema": "VIII. Procesos Operativos del ARIMAC",
+        "pregunta": "Una vez confirmada la transferencia de información de las unidades, ¿qué se ejecuta?",
+        "opciones": [
+            "El respaldo semanal",
+            "El cierre nacional",
+            "El cierre delegacional",
+            "La depuración de expedientes",
+        ],
+        "respuesta": 2,
+        "explicacion": "Confirmada la transferencia de información de las unidades, se ejecuta el cierre delegacional. Después la DIS realiza el cierre nacional.",
+    },
+    {
+        "tema": "VIII. Procesos Operativos del ARIMAC",
+        "pregunta": "¿Qué subsistema del DataMart corresponde a 'Egresos Hospitalarios'?",
+        "opciones": [
+            "Subsistema 13",
+            "Subsistema 10",
+            "Subsistema 27",
+            "Subsistema 31",
+        ],
+        "respuesta": 0,
+        "explicacion": "El subsistema 13 corresponde a Egresos Hospitalarios (automatizado, generado por SIAIS/SIMO).",
+    },
+    {
+        "tema": "VIII. Procesos Operativos del ARIMAC",
+        "pregunta": "¿Qué subsistema del DataMart corresponde a 'Motivos de Demanda'?",
+        "opciones": [
+            "Subsistema 10",
+            "Subsistema 13",
+            "Subsistema 31",
+            "Subsistema 27",
+        ],
+        "respuesta": 3,
+        "explicacion": "El subsistema 27 corresponde a Motivos de Demanda (automatizado, generado por SIAIS/SIMO).",
+    },
+    {
+        "tema": "VIII. Procesos Operativos del ARIMAC",
+        "pregunta": "¿Quién actualiza los catálogos antes de cada cierre nacional?",
+        "opciones": [
+            "La CIAE",
+            "La DIS",
+            "El ARIMAC",
+            "La UMAE",
+        ],
+        "respuesta": 1,
+        "explicacion": "La DIS (División de Información en Salud) actualiza los catálogos antes de cada cierre nacional.",
+    },
+    {
+        "tema": "VIII. Procesos Operativos del ARIMAC",
+        "pregunta": "¿Quiénes son los responsables del análisis de la información en la unidad médica?",
+        "opciones": [
+            "El Director y la Jefatura de departamento clínico",
+            "El personal del ARIMAC",
+            "La Delegación",
+            "El epidemiólogo y la enfermera",
+        ],
+        "respuesta": 0,
+        "explicacion": "El Director y la Jefatura de departamento clínico de la unidad son los responsables del análisis de la información.",
+    },
 ]
 
 
@@ -1053,6 +1662,26 @@ FLASHCARDS = [
 # INICIALIZACIÓN DEL ESTADO
 # ============================================================
 
+HISTORIAL_ARCHIVO = Path(__file__).parent / "historial_examenes.json"
+
+
+def cargar_historial():
+    try:
+        with open(HISTORIAL_ARCHIVO, "r", encoding="utf-8") as f:
+            datos = json.load(f)
+            return datos if isinstance(datos, list) else []
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return []
+
+
+def guardar_historial(historial):
+    try:
+        with open(HISTORIAL_ARCHIVO, "w", encoding="utf-8") as f:
+            json.dump(historial, f, ensure_ascii=False, indent=2)
+    except OSError:
+        pass
+
+
 def init_state():
     defaults = {
         "pagina": "inicio",
@@ -1062,9 +1691,11 @@ def init_state():
         "quiz_score": 0,
         "quiz_respondida": False,
         "quiz_seleccion": None,
-        "quiz_tema_filtro": "Todos",
+        "quiz_tema": "Todos",
         "quiz_total": 10,
-        "historial": [],
+        "quiz_detalle": [],
+        "quiz_guardado": False,
+        "preguntas_usadas": [],
         "flashcard_idx": 0,
         "flashcard_mostrar": False,
         "flashcard_lista": [],
@@ -1072,6 +1703,8 @@ def init_state():
     for k, v in defaults.items():
         if k not in st.session_state:
             st.session_state[k] = v
+    if "historial" not in st.session_state:
+        st.session_state.historial = cargar_historial()
 
 
 init_state()
@@ -1190,31 +1823,73 @@ def pagina_quiz():
         # Configuración del examen
         st.markdown("### Configuración del Examen")
 
-        temas_disponibles = ["Todos"] + list(set(p["tema"] for p in PREGUNTAS))
-        tema_sel = st.selectbox("Selecciona el tema:", temas_disponibles, key="quiz_tema_sel")
+        conteo_por_tema = {t: sum(1 for p in PREGUNTAS if p["tema"] == t) for t in TEMAS}
+        temas_disponibles = ["Todos"] + [t for t in TEMAS if conteo_por_tema[t] > 0]
 
-        preguntas_filtradas = PREGUNTAS if tema_sel == "Todos" else [p for p in PREGUNTAS if p["tema"] == tema_sel]
-        max_preguntas = len(preguntas_filtradas)
+        def etiqueta_tema(t):
+            n = len(PREGUNTAS) if t == "Todos" else conteo_por_tema[t]
+            return f"{t} ({n} preguntas)"
 
-        num_preguntas = st.slider(
-            "Número de preguntas:",
-            min_value=min(5, max_preguntas),
-            max_value=max_preguntas,
-            value=min(10, max_preguntas),
-            key="quiz_num_slider",
-        )
+        tema_sel = st.selectbox("Selecciona el tema:", temas_disponibles, format_func=etiqueta_tema, key="quiz_tema_sel")
 
-        st.info(f"Se seleccionarán **{num_preguntas}** preguntas aleatorias de **{max_preguntas}** disponibles.")
+        indices_filtrados = [i for i, p in enumerate(PREGUNTAS) if tema_sel == "Todos" or p["tema"] == tema_sel]
+        max_preguntas = len(indices_filtrados)
+
+        if max_preguntas <= 5:
+            num_preguntas = max_preguntas
+        else:
+            num_preguntas = st.slider(
+                "Número de preguntas:",
+                min_value=5,
+                max_value=max_preguntas,
+                value=min(10, max_preguntas),
+                key="quiz_num_slider",
+            )
+
+        st.info(f"Se seleccionarán **{num_preguntas}** preguntas aleatorias de **{max_preguntas}** disponibles. Las preguntas no se repiten entre exámenes hasta agotar el banco del tema.")
 
         if st.button("🚀 Iniciar Examen", type="primary", use_container_width=True):
-            seleccion = random.sample(preguntas_filtradas, num_preguntas)
-            st.session_state.quiz_preguntas = seleccion
+            # Evitar repetir preguntas ya usadas en exámenes anteriores:
+            # primero entran las no vistas; solo se completa con vistas si no alcanzan
+            usadas = set(st.session_state.preguntas_usadas)
+            disponibles = [i for i in indices_filtrados if i not in usadas]
+            if len(disponibles) >= num_preguntas:
+                seleccion_idx = random.sample(disponibles, num_preguntas)
+            else:
+                faltantes = num_preguntas - len(disponibles)
+                repetibles = [i for i in indices_filtrados if i in usadas]
+                seleccion_idx = disponibles + random.sample(repetibles, faltantes)
+                random.shuffle(seleccion_idx)
+                # Se agotó el banco del tema: reiniciar su ciclo
+                for i in indices_filtrados:
+                    usadas.discard(i)
+            usadas.update(seleccion_idx)
+            st.session_state.preguntas_usadas = list(usadas)
+
+            # Barajar el orden de las opciones de cada pregunta
+            examen = []
+            for i in seleccion_idx:
+                p = PREGUNTAS[i]
+                orden = list(range(len(p["opciones"])))
+                random.shuffle(orden)
+                examen.append({
+                    "tema": p["tema"],
+                    "pregunta": p["pregunta"],
+                    "opciones": [p["opciones"][j] for j in orden],
+                    "respuesta": orden.index(p["respuesta"]),
+                    "explicacion": p["explicacion"],
+                })
+
+            st.session_state.quiz_preguntas = examen
             st.session_state.quiz_idx = 0
             st.session_state.quiz_score = 0
             st.session_state.quiz_activo = True
             st.session_state.quiz_respondida = False
             st.session_state.quiz_seleccion = None
             st.session_state.quiz_total = num_preguntas
+            st.session_state.quiz_tema = tema_sel
+            st.session_state.quiz_detalle = []
+            st.session_state.quiz_guardado = False
             st.rerun()
     else:
         # Examen en curso
@@ -1235,24 +1910,34 @@ def pagina_quiz():
             </div>
             """, unsafe_allow_html=True)
 
-            # Guardar en historial
-            st.session_state.historial.append({
-                "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                "score": score,
-                "total": total,
-                "porcentaje": pct,
-            })
+            # Guardar en historial (solo una vez por examen)
+            if not st.session_state.quiz_guardado:
+                st.session_state.historial.append({
+                    "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "tema": st.session_state.quiz_tema,
+                    "score": score,
+                    "total": total,
+                    "porcentaje": pct,
+                    "detalle": st.session_state.quiz_detalle,
+                })
+                guardar_historial(st.session_state.historial)
+                st.session_state.quiz_guardado = True
 
             st.markdown("")
 
-            if pct < 80:
+            temas_fallados = sorted({d["tema"] for d in st.session_state.quiz_detalle if not d["acierto"]})
+            if temas_fallados:
                 st.markdown("### 💡 Temas a reforzar:")
-                temas_fallados = set()
-                for i, p in enumerate(preguntas):
-                    if i < len(preguntas):
-                        temas_fallados.add(p["tema"])
                 for t in temas_fallados:
                     st.markdown(f"- {t}")
+
+            with st.expander("📋 Revisar mis respuestas"):
+                for n, d in enumerate(st.session_state.quiz_detalle, 1):
+                    icono = "✅" if d["acierto"] else "❌"
+                    st.markdown(f"{icono} **{n}. {d['pregunta']}**")
+                    if not d["acierto"]:
+                        st.markdown(f"- Tu respuesta: {d['seleccion']}")
+                        st.markdown(f"- Respuesta correcta: **{d['correcta']}**")
 
             col1, col2 = st.columns(2)
             with col1:
@@ -1287,6 +1972,13 @@ def pagina_quiz():
                     st.session_state.quiz_respondida = True
                     if i == pregunta["respuesta"]:
                         st.session_state.quiz_score += 1
+                    st.session_state.quiz_detalle.append({
+                        "tema": pregunta["tema"],
+                        "pregunta": pregunta["pregunta"],
+                        "seleccion": pregunta["opciones"][i],
+                        "correcta": pregunta["opciones"][pregunta["respuesta"]],
+                        "acierto": i == pregunta["respuesta"],
+                    })
                     st.rerun()
         else:
             seleccion = st.session_state.quiz_seleccion
@@ -1472,14 +2164,32 @@ def pagina_progreso():
 
     # Tabla de historial
     st.markdown("### Historial de Exámenes")
+    st.caption("Toca un examen para revisar tus respuestas.")
     for i, h in enumerate(reversed(historial), 1):
+        num = total_examenes - i + 1
         emoji = "🟢" if h["porcentaje"] >= 80 else "🟡" if h["porcentaje"] >= 60 else "🔴"
-        st.markdown(f"{emoji} **Examen {total_examenes - i + 1}** | {h['fecha']} | **{h['score']}/{h['total']}** ({h['porcentaje']:.0f}%)")
+        tema = h.get("tema", "Todos")
+        with st.expander(f"{emoji} Examen {num} | {h['fecha']} | {h['score']}/{h['total']} ({h['porcentaje']:.0f}%) | {tema}"):
+            detalle = h.get("detalle", [])
+            if not detalle:
+                st.caption("Este examen no tiene detalle de respuestas guardado.")
+            else:
+                falladas = [d for d in detalle if not d["acierto"]]
+                if falladas:
+                    temas_fallados = sorted({d["tema"] for d in falladas})
+                    st.markdown("**Temas a reforzar:** " + ", ".join(temas_fallados))
+                for n, d in enumerate(detalle, 1):
+                    icono = "✅" if d["acierto"] else "❌"
+                    st.markdown(f"{icono} **{n}. {d['pregunta']}**")
+                    if not d["acierto"]:
+                        st.markdown(f"- Tu respuesta: {d['seleccion']}")
+                        st.markdown(f"- Respuesta correcta: **{d['correcta']}**")
 
     st.divider()
 
     if st.button("🗑️ Limpiar historial", use_container_width=True):
         st.session_state.historial = []
+        guardar_historial([])
         st.rerun()
 
 
